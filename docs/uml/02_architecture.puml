@@ -24,7 +24,7 @@ rectangle "Браузер користувача" as Browser {
 }
 
 component "Open-Meteo\nAir Quality API" as OM <<зовнішня система>>
-component "Сервер тайлів\nOpenStreetMap" as OSM <<зовнішня система>>
+component "Сервер тайлів карти\nEsri (ArcGIS Online)" as OSM <<зовнішня система>>
 component "Статичний хостинг\n(index.html, JS, CSS)" as Host <<хостинг>>
 
 Host ..> Pages : завантаження
