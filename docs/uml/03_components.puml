@@ -1,0 +1,41 @@
+@startuml
+!include _style.iuml
+skinparam componentStyle uml2
+
+component "main.tsx" as Main
+component "HashRouter" as Router
+component "AppProvider\n(AppContext)" as Prov
+component "App\n(маршрути, Suspense)" as App
+component Header
+component AlertBanner
+component StatusBar
+
+package "Сторінки (lazy)" {
+  component HomePage
+  component CityPage
+  component ComparePage
+  component SettingsPage
+}
+package "Компоненти" {
+  component "AqiMap\n(react-leaflet)" as Map
+  component "AqiAreaChart,\nCompareChart\n(recharts)" as Charts
+  component "AqiBadge,\nFavButton, Legend" as Small
+}
+
+Main --> Router
+Router --> Prov
+Prov --> App
+App --> Header
+App --> AlertBanner
+App --> StatusBar
+App ..> HomePage : <<lazy>>
+App ..> CityPage : <<lazy>>
+App ..> ComparePage : <<lazy>>
+App ..> SettingsPage : <<lazy>>
+HomePage --> Map
+HomePage --> Small
+CityPage --> Charts
+CityPage --> Small
+ComparePage --> Charts
+SettingsPage --> Small
+@enduml

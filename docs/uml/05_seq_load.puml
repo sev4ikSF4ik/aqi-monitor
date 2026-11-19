@@ -1,0 +1,34 @@
+@startuml
+!include _style.iuml
+autonumber
+actor "Користувач" as U
+participant "AppContext" as C
+participant "api.ts" as A
+participant "Open-Meteo API" as OM
+participant "demo.ts" as D
+
+U -> C : відкриває застосунок
+activate C
+C -> C : refresh(), setLoading(true)
+C -> A : loadSnapshot(CITIES, forceDemo)
+activate A
+alt forceDemo = true
+  A -> D : demoSnapshot(cities)
+  D --> A : Snapshot (demo)
+else forceDemo = false
+  A -> OM : GET /v1/air-quality?latitude=...&longitude=...
+  alt HTTP 200, 24 локації
+    OM --> A : JSON (current, hourly)
+    A -> A : parseLocation() ×24,\ntrimWindow()
+  else помилка мережі / HTTP ≠ 200 / тайм-аут 8 с
+    OM --> A : помилка / AbortError
+    A -> D : demoSnapshot(cities)
+    D --> A : Snapshot (demo)
+  end
+end
+A --> C : { snapshot, error? }
+deactivate A
+C -> C : setSnapshot(), setError(),\nsetLoading(false)
+C --> U : карта, список, статус\n«Живі дані» / «Демо-режим»
+deactivate C
+@enduml

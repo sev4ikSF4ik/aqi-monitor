@@ -1,0 +1,28 @@
+@startuml
+!include _style.iuml
+autonumber
+actor "Користувач" as U
+participant "SettingsPage" as S
+participant "AppContext" as C
+participant "storage.ts" as ST
+participant "Notification API" as N
+
+U -> S : змінює поріг AQI
+S -> C : updateSettings({ threshold })
+activate C
+C -> ST : saveSettings(settings)
+C -> C : alerts = обрані міста,\nде AQI ≥ поріг
+C --> U : AlertBanner + лічильник у меню
+opt сповіщення увімкнені і дозвіл = granted
+  loop для кожного міста з alerts
+    C -> ST : shouldNotify(cityId)
+    ST --> C : true, якщо минуло > 3 год
+    opt true
+      C -> N : new Notification(місто, AQI, порада)
+      C -> ST : markNotified(cityId)
+      N --> U : системне сповіщення
+    end
+  end
+end
+deactivate C
+@enduml

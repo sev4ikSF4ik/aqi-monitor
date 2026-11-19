@@ -1,0 +1,72 @@
+@startuml
+!include _style.iuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class City <<interface>> {
+  +id: string
+  +name: string
+  +region: string
+  +lat: number
+  +lon: number
+  +population: number
+}
+class Reading <<interface>> {
+  +time: string
+  +aqi: number
+  +pm2_5: number
+  +pm10: number
+  +no2: number
+  +o3: number
+  +so2: number
+  +co: number
+}
+class HourPoint <<interface>> {
+  +time: string
+  +aqi: number
+  +pm2_5: number
+  +pm10: number
+  +no2: number
+  +o3: number
+}
+class CityData <<interface>> {
+  +city: City
+  +current: Reading
+  +hourly: HourPoint[]
+}
+class Snapshot <<interface>> {
+  +source: DataSource
+  +fetchedAt: string
+  +cities: Record<string, CityData>
+}
+class Settings <<interface>> {
+  +threshold: number
+  +notifications: boolean
+  +forceDemo: boolean
+  +theme: Theme
+}
+class AqiLevel <<interface>> {
+  +key: string
+  +label: string
+  +color: string
+  +advice: string
+  +sensitiveAdvice: string
+}
+enum DataSource <<enumeration>> {
+  live
+  demo
+}
+enum Theme <<enumeration>> {
+  light
+  dark
+  system
+}
+
+CityData *-- "1" City
+CityData *-- "1" Reading
+CityData *-- "0..72" HourPoint
+Snapshot *-- "1..*" CityData
+Snapshot ..> DataSource
+Settings ..> Theme
+CityData ..> AqiLevel : <<use>>
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+!include _style.iuml
+hide empty description
+state "Завантаження" as Loading : entry / спінер, запит до API
+state "Живі дані" as Live : статус «Живі дані»
+state "Демо-режим (авто)" as Auto : статус «Демо-режим»,\nтекст помилки API
+state "Демо-режим (примусовий)" as Forced : forceDemo = true
+
+[*] --> Loading
+Loading --> Live : [відповідь OK]
+Loading --> Auto : [помилка / тайм-аут]
+Live --> Loading : таймер 15 хв / «Оновити»
+Auto --> Loading : таймер 15 хв / «Оновити»
+Live --> Forced : увімкнено демо-режим
+Auto --> Forced : увімкнено демо-режим
+Forced --> Loading : вимкнено демо-режим
+@enduml

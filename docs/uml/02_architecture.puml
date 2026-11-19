@@ -1,0 +1,43 @@
+@startuml
+!include _style.iuml
+skinparam componentStyle uml2
+
+rectangle "Браузер користувача" as Browser {
+  rectangle "Шар представлення" as LView {
+    component "Сторінки\nHomePage, CityPage,\nComparePage, SettingsPage" as Pages
+    component "Компоненти\nAqiMap, HourlyChart,\nAqiBadge, AlertBanner" as Comps
+  }
+  rectangle "Шар стану" as LState {
+    component "AppContext\nдані, обрані міста,\nналаштування, перевищення" as Ctx
+  }
+  rectangle "Шар сервісів (src/lib)" as LSvc {
+    component "api.ts" as Api
+    component "demo.ts" as Demo
+    component "aqi.ts" as Aqi
+    component "storage.ts" as Store
+  }
+  rectangle "API браузера" as LBrowser {
+    component "fetch +\nAbortController" as Fetch
+    component "localStorage" as LS
+    component "Notification API" as Notif
+  }
+}
+
+component "Open-Meteo\nAir Quality API" as OM <<зовнішня система>>
+component "Сервер тайлів\nOpenStreetMap" as OSM <<зовнішня система>>
+component "Статичний хостинг\n(index.html, JS, CSS)" as Host <<хостинг>>
+
+Host ..> Pages : завантаження
+Pages --> Comps
+Pages --> Ctx
+Comps --> Ctx
+Pages --> Aqi
+Ctx --> Api
+Ctx --> Store
+Ctx --> Notif
+Api --> Demo : помилка /\nтайм-аут
+Api --> Fetch
+Store --> LS
+Fetch --> OM : HTTPS, JSON
+Comps --> OSM : HTTPS, тайли
+@enduml

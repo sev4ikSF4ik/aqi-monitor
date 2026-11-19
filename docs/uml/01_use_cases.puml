@@ -1,0 +1,38 @@
+@startuml
+!include _style.iuml
+left to right direction
+actor "Користувач" as U
+actor "Таймер оновлення\n(кожні 15 хв)" as T <<система>>
+actor "Open-Meteo\nAir Quality API" as API <<зовнішня система>>
+
+rectangle "Вебзастосунок «Повітря UA»" {
+  usecase "Переглянути карту\nякості повітря" as UC1
+  usecase "Шукати та сортувати\nміста" as UC2
+  usecase "Переглянути дані міста" as UC3
+  usecase "Переглянути прогноз\nна 48 год" as UC3a
+  usecase "Порівняти міста" as UC4
+  usecase "Керувати обраними\nмістами" as UC5
+  usecase "Налаштувати поріг AQI" as UC6
+  usecase "Увімкнути системні\nсповіщення" as UC7
+  usecase "Змінити тему\nоформлення" as UC8
+  usecase "Увімкнути демо-режим" as UC9
+  usecase "Оновити дані" as S1
+  usecase "Перевірити поріг\nобраних міст" as S2
+  usecase "Показати банер /\nсповіщення" as S3
+}
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+U --> UC7
+U --> UC8
+U --> UC9
+UC3a .> UC3 : <<extend>>
+S1 .> S2 : <<include>>
+S3 .> S2 : <<extend>>\n[AQI ≥ поріг]
+T --> S1
+S1 --> API
+@enduml
