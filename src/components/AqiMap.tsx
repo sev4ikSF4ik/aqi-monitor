@@ -15,7 +15,16 @@ export default function AqiMap({ data, highlight, onHover }: Props) {
   return (
     <div className="map-wrap">
       <MapContainer bounds={[[46.2, 22.0], [51.8, 36.6]]} boundsOptions={{ padding: [18, 18] }} zoomSnap={0.25} minZoom={4.5} maxZoom={11} scrollWheelZoom={false} className="map" aria-label="Карта якості повітря">
-        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {/* Esri World Light Gray basemap: unlike tile.openstreetmap.org it also serves pages opened from a local file (no Referer) */}
+        <TileLayer
+          attribution='Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
+        />
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
+        />
         {data.map((d) => {
           const ok = Number.isFinite(d.current.aqi);
           const lvl = aqiLevel(d.current.aqi);

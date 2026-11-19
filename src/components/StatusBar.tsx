@@ -17,7 +17,7 @@ export default function StatusBar() {
         </p>
         <p className="muted small">
           Дані: <a href="https://open-meteo.com/en/docs/air-quality-api" target="_blank" rel="noreferrer">Open-Meteo Air Quality API</a> (модель CAMS Europe, Copernicus).
-          Індекс — European AQI (EEA). Карта © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>.
+          Індекс — European AQI (EEA). Карта © <a href="https://www.esri.com/" target="_blank" rel="noreferrer">Esri</a>, <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>.
           STEM-проєкт, Всеволод Ковальчук, ІПЗ-31, КНУ імені Тараса Шевченка.
         </p>
       </div>
